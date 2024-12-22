@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<main>
+    <!-- Section de receitas -->
+    <section class="recipes section-padding">
+        <div class="container">
+            <div class="row">
+                <h2 class="text-center mb-lg-5 mb-4">As melhores receitas em um único lugar</h2>
+
+                {% if receitas %}
+                    {% for receita in receitas %}
+                    <div class="col-lg-4 col-md-6 col-12">
+                        <div class="recipe-thumb mb-4">
+                            <a href="{% url 'core:receita_detail' receita.id %}">
+                                <img src="{% if receita.foto %}{{ receita.foto.url }}{% else %}{% static 'images/alexander-hipp-iEEBWgY_6lA-unsplash.jpg' %}{% endif %}"
+                                     class="img-fluid recipe-image"
+                                     alt="{{ receita.titulo }}">
+
+                            </a>
+                            <div class="recipe-info">
+                                <h5 class="recipe-title mt-2">
+                                    <a href="{% url 'core:receita_detail' receita.id %}" class="recipe-title-link">{{ receita.titulo }}</a>
+                                </h5>
+                                <p class="recipe-description">{{ receita.instrucoes |truncatewords:20 }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-12">
+                        <p class="text-center">Ainda não temos receitas no site. Cadastre a sua primeira receita!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}

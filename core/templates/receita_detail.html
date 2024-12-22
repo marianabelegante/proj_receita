@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main>
+    <section class="recipe-detail section-padding">
+        <div class="container">
+            <h1 class="text-center">{{ receita.titulo }}</h1>
+            <img src="{{ receita.foto.url }}" class="img-fluid mb-4" alt="{{ receita.titulo }}">
+            <p><strong>Ingredientes:</strong></p>
+            <ul>
+                {% for ingrediente in ingredientes %}
+                    <li>{{ ingrediente }}</li>
+                {% endfor %}
+            </ul>
+            <p><strong>Instruções:</strong></p>
+            <p>{{ receita.instrucoes }}</p>
+        </div>
+    </section>
+
+    <section class="comments section-padding">
+        <div class="container">
+            <h2>Comentários</h2>
+            {% if comentarios %}
+                <ul>
+                    {% for comentario in comentarios %}
+                        <li>
+                            <strong>{{ comentario.usuario.username }}</strong>: {{ comentario.texto }} <br>
+                            <small class="text-muted">{{ comentario.data_criacao|date:"d/m/Y H:i" }}</small>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Não há comentários ainda. Seja o primeiro a comentar!</p>
+            {% endif %}
+
+            {% if user.is_authenticated %}
+                <form method="post" action="{% url 'core:criar_comentario' receita.id %}">
+                    {% csrf_token %}
+                    {{ comentario_form.as_p }}
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                </form>
+            {% else %}
+                <p class="text-muted">Faça <a href="{% url 'loginuser' %}">login</a> para comentar.</p>
+
+            {% endif %}
+        </div>
+    </section>
+</main>
+{% endblock %}
